@@ -31,7 +31,7 @@ public class Pointer : MonoBehaviour
         sprRenderer.enabled = false;
     }
 
-    public void SetState(bool state, BaseTile target)
+    public void SetState(bool state, Tile target)
     {
         //HideMenu();
 
@@ -39,17 +39,17 @@ public class Pointer : MonoBehaviour
         {
             ShowPointer();
 
-            if (target.Type == BaseTile.TileType.Land)
+            if (target.Type == Tile.TileType.Land)
             {
                 //DisplayMenu(LandCanvas);
                 SetPointerToSelector();
             }
-            else if (target.Type == BaseTile.TileType.Path)
+            else if (target.Type == Tile.TileType.Path)
             {
                 //DisplayMenu(PathCanvas);
                 SetPointerToSelector();
             }
-            else if (target.Type == BaseTile.TileType.Obstacle)
+            else if (target.Type == Tile.TileType.Obstacle)
             {
                 SetPointerToTargetter();
             }

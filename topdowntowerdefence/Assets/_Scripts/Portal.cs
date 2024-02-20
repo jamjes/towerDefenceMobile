@@ -1,16 +1,26 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
+    float duration = 10;
+    [SerializeField] TextMeshProUGUI timerLabel;
+
     void Start()
     {
-        StartCoroutine(Countdown());
+        StartCoroutine(Countdown(duration));
     }
-    
-    public IEnumerator Countdown()
+
+    private void Update()
     {
-        yield return new WaitForSeconds(5);
+        duration -= Time.deltaTime;
+        timerLabel.text = ((int)duration).ToString();
+    }
+
+    public IEnumerator Countdown(float time)
+    {
+        yield return new WaitForSeconds(time);
         SelfDestruct();
     }
 

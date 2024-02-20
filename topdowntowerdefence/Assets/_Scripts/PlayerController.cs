@@ -5,18 +5,21 @@ public class PlayerController : MonoBehaviour
 {
     public Canvas LandCanvas, PathCanvas;
     public Pointer pointer;
-    BaseTile targetTile;
+    Tile targetTile;
+    public GameObject BombPrefab;
+    public GameObject PortalPrefab;
 
     #region Solved_Methods
     private void OnEnable()
     {
-        BaseTile.OnTileSelect += ToggleTargetTile;
+        Tile.OnTileSelect += ToggleTargetTile;
     }
 
     private void OnDisable()
     {
-        BaseTile.OnTileSelect -= ToggleTargetTile;
+        Tile.OnTileSelect -= ToggleTargetTile;
     }
+
 
     void MovePlayerTo(Vector3 newPosition)
     {
@@ -25,7 +28,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    void ToggleTargetTile(BaseTile target)
+    void ToggleTargetTile(Tile target)
     {
         HideAllMenus();
 
@@ -35,11 +38,11 @@ public class PlayerController : MonoBehaviour
             MovePlayerTo(targetTile.transform.position);
             pointer.SetState(true, targetTile);
             
-            if (targetTile.Type == BaseTile.TileType.Land)
+            if (targetTile.Type == Tile.TileType.Land)
             {
                 DisplayMenu(LandCanvas);
             }
-            else if (targetTile.Type == BaseTile.TileType.Path)
+            else if (targetTile.Type == Tile.TileType.Path)
             {
                 DisplayMenu(PathCanvas);
             }
@@ -67,5 +70,21 @@ public class PlayerController : MonoBehaviour
     {
         LandCanvas.gameObject.SetActive(false);
         PathCanvas.gameObject.SetActive(false);
+    }
+
+    public void SpawnBombAtTarget()
+    {
+        GameObject bomb = Instantiate(BombPrefab, targetTile.transform.position, Quaternion.identity);
+        bomb.transform.parent = targetTile.transform;
+        targetTile.SpawnedObject = bomb;
+        ToggleTargetTile(targetTile);
+    }
+
+    public void SpawnPortalAtTarget()
+    {
+        GameObject portal = Instantiate(PortalPrefab, targetTile.transform.position, Quaternion.identity);
+        portal.transform.parent = targetTile.transform;
+        targetTile.SpawnedObject = portal;
+        ToggleTargetTile(targetTile);
     }
 }
