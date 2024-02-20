@@ -1,50 +1,63 @@
-using System.Collections;
+using System.Reflection;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Pointer : MonoBehaviour
 {
     [SerializeField] Sprite targetterSprite, selectorSprite;
     SpriteRenderer sprRenderer;
-    public enum PointerType { targetter, selector };
-    PointerType type;
 
     private void Start()
     {
         sprRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void OnEnable()
+    public void SetPointerToSelector()
     {
-        Tile.OnTileClick += SetPointerType;
+        sprRenderer.sprite = selectorSprite;
     }
 
-    private void OnDisable()
+    public void SetPointerToTargetter()
     {
-        Tile.OnTileClick -= SetPointerType;
+        sprRenderer.sprite = targetterSprite;
     }
 
-    void SetPointerType(Tile target)
+    public void ShowPointer()
     {
-        switch(target.Type)
-        {
-            case Tile.TileType.Obstacle:
-                sprRenderer.sprite = targetterSprite;
-                break;
-            
-            default:
-                sprRenderer.sprite = selectorSprite;
-                break;
-        }
+        sprRenderer.enabled = true;
     }
 
-    public void Hide()
+    public void HidePointer()
     {
         sprRenderer.enabled = false;
     }
 
-    public void Show()
+    public void SetState(bool state, BaseTile target)
     {
-        sprRenderer.enabled = true;
+        //HideMenu();
+
+        if (state == true)
+        {
+            ShowPointer();
+
+            if (target.Type == BaseTile.TileType.Land)
+            {
+                //DisplayMenu(LandCanvas);
+                SetPointerToSelector();
+            }
+            else if (target.Type == BaseTile.TileType.Path)
+            {
+                //DisplayMenu(PathCanvas);
+                SetPointerToSelector();
+            }
+            else if (target.Type == BaseTile.TileType.Obstacle)
+            {
+                SetPointerToTargetter();
+            }
+        }
+        else
+        {
+            HidePointer();
+        }
     }
+
 }

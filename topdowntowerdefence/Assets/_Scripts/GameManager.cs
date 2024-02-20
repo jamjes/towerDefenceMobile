@@ -8,9 +8,9 @@ public class GameManager : MonoBehaviour
     public GameObject PortalPrefab;
     public GameObject BombPrefab;
 
-    public Tile TargetTile;
+    public BaseTile TargetTile;
 
-    public delegate void TileDelegate(Tile self);
+    public delegate void TileDelegate(BaseTile self);
     public static event TileDelegate OnTileSelect;
     public static event TileDelegate OnTileDeselect;
 
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SelectTile(Tile target)
+    public void SelectTile(BaseTile target)
     {
         TargetTile = target;
 
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void DeselectTile(Tile target)
+    public void DeselectTile(BaseTile target)
     {
         TargetTile = null;
 

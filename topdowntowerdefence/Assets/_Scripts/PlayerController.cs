@@ -4,57 +4,68 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Canvas LandCanvas, PathCanvas;
-    public Canvas activeCanvas;
     public Pointer pointer;
-    Tile targetTile;
+    BaseTile targetTile;
 
+    #region Solved_Methods
     private void OnEnable()
     {
-        Tile.OnTileClick += SelectTarget;
+        BaseTile.OnTileSelect += ToggleTargetTile;
     }
 
     private void OnDisable()
     {
-        Tile.OnTileClick -= SelectTarget;
+        BaseTile.OnTileSelect -= ToggleTargetTile;
     }
 
-    void SetActiveCanvas()
+    void MovePlayerTo(Vector3 newPosition)
+    {
+        transform.position = newPosition;
+    }
+
+    #endregion
+
+    void ToggleTargetTile(BaseTile target)
+    {
+        HideAllMenus();
+
+        if (targetTile != target)
+        {
+            targetTile = target;
+            MovePlayerTo(targetTile.transform.position);
+            pointer.SetState(true, targetTile);
+            
+            if (targetTile.Type == BaseTile.TileType.Land)
+            {
+                DisplayMenu(LandCanvas);
+            }
+            else if (targetTile.Type == BaseTile.TileType.Path)
+            {
+                DisplayMenu(PathCanvas);
+            }
+        }
+        else
+        {
+            targetTile = null;
+            pointer.SetState(false, targetTile);
+        }
+    }
+
+    void DisplayMenu(Canvas target)
+    {
+        if (target == LandCanvas)
+        {
+            LandCanvas.gameObject.SetActive(true);
+        }
+        else if (target == PathCanvas)
+        {
+            PathCanvas.gameObject.SetActive(true);
+        }
+    }
+
+    void HideAllMenus()
     {
         LandCanvas.gameObject.SetActive(false);
         PathCanvas.gameObject.SetActive(false);
-
-        switch (targetTile.Type)
-        {
-            case Tile.TileType.Land:
-                activeCanvas = LandCanvas;
-                break;
-
-            case Tile.TileType.Path:
-                activeCanvas = PathCanvas;
-                break;
-        }
-
-        activeCanvas.gameObject.SetActive(true);
-    }
-
-
-    void PermutePlayer()
-    {
-        transform.position = targetTile.transform.position;
-    }
-
-    void SelectTarget(Tile target)
-    {
-        targetTile = target;
-        PermutePlayer();
-        pointer.Show();
-        SetActiveCanvas();
-    }
-
-    void DeselectTarget(Tile target)
-    {
-        targetTile = null;
-        pointer.Hide();
-        activeCanvas.gameObject.SetActive(false);
     }
 }
