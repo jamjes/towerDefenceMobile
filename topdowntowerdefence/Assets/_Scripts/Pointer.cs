@@ -1,22 +1,50 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Pointer : MonoBehaviour
 {
+    [SerializeField] Sprite targetterSprite, selectorSprite;
+    SpriteRenderer sprRenderer;
+    public enum PointerType { targetter, selector };
+    PointerType type;
+
+    private void Start()
+    {
+        sprRenderer = GetComponent<SpriteRenderer>();
+    }
+
     private void OnEnable()
     {
-        Tile.SnapPointer += Permute;
+        Tile.OnTileClick += SetPointerType;
     }
 
     private void OnDisable()
     {
-        Tile.SnapPointer -= Permute;
+        Tile.OnTileClick -= SetPointerType;
     }
 
-    void Permute(Vector3 pos)
+    void SetPointerType(Tile target)
     {
-        transform.position = pos;
+        switch(target.Type)
+        {
+            case Tile.TileType.Obstacle:
+                sprRenderer.sprite = targetterSprite;
+                break;
+            
+            default:
+                sprRenderer.sprite = selectorSprite;
+                break;
+        }
+    }
+
+    public void Hide()
+    {
+        sprRenderer.enabled = false;
+    }
+
+    public void Show()
+    {
+        sprRenderer.enabled = true;
     }
 }
