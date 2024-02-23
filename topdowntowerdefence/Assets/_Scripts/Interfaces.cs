@@ -4,3 +4,8 @@ public interface IDamageable
     void Heal();
     void Kill();
 }
+
+public interface ISpawnable
+{
+    void OnInstantiate(float duration);
+}

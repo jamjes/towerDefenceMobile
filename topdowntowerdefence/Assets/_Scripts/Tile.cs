@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public enum TileType { Land, Path, Obstacle };
-    public TileType Type;
-
     public bool Interactable = true;
 
     public GameObject SpawnedObject;
 
     public delegate void TileDelegate(Tile self);
     public static event TileDelegate OnTileSelect;
+
+    public TilePainter gfx;
+
 
     public void OnMouseDown()
     {
@@ -22,7 +22,7 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void SpawnObject(GameObject targetObject)
+    /*public void SpawnObject(GameObject targetObject)
     {
         if (SpawnedObject == null)
         {
@@ -30,15 +30,15 @@ public class Tile : MonoBehaviour
             obj.transform.parent = targetObject.transform;
             Interactable = false;
         }
-    }
+    }*/
 
-    public void DeleteSpawnedObject()
+    /*public void DeleteSpawnedObject()
     {
         if (SpawnedObject != null)
         {
             Destroy(SpawnedObject);
             Interactable = true;
         }
-    }
+    }*/
 }
 

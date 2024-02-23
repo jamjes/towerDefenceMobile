@@ -39,19 +39,15 @@ public class Pointer : MonoBehaviour
         {
             ShowPointer();
 
-            if (target.Type == Tile.TileType.Land)
+            if (target.gfx.tileType == TilePainter.TileType.Land)
             {
                 //DisplayMenu(LandCanvas);
                 SetPointerToSelector();
             }
-            else if (target.Type == Tile.TileType.Path)
+            else if (target.gfx.tileType == TilePainter.TileType.Path)
             {
                 //DisplayMenu(PathCanvas);
                 SetPointerToSelector();
-            }
-            else if (target.Type == Tile.TileType.Obstacle)
-            {
-                SetPointerToTargetter();
             }
         }
         else

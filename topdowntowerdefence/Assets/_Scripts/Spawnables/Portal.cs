@@ -2,18 +2,12 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-public class Portal : MonoBehaviour, IDamageable
+public class Portal : MonoBehaviour, ISpawnable, IDamageable
 {
     [SerializeField] TextMeshProUGUI _timerLabel;
     bool _started = false;
-    [SerializeField] float _duration;
     float timeReference;
-    void Start()
-    {
-        //Remove this once Trap Menu implemented, call from Player Class.
-        OnInstantiate(12);
-    }
-
+    
     public void Heal()
     {
         throw new System.NotImplementedException();
@@ -27,15 +21,6 @@ public class Portal : MonoBehaviour, IDamageable
     public void Kill()
     {
         Destroy(this.gameObject);
-    }
-
-    void OnMouseDown()
-    {
-        if (_started == false)
-        {
-            StartCoroutine(BeginCountdown(_duration));
-        }
-        
     }
 
     IEnumerator BeginCountdown(float duration)
@@ -56,9 +41,9 @@ public class Portal : MonoBehaviour, IDamageable
         }
     }
 
-    void OnInstantiate(float duration)
+    public void OnInstantiate(float duration)
     {
-        this._duration = duration;
-        _timerLabel.text = _duration.ToString("0.00");
+        _timerLabel.text = duration.ToString("0.00");
+        StartCoroutine(BeginCountdown(duration));
     }
 }

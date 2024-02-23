@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,6 +9,7 @@ public class PlayerController : MonoBehaviour
     Tile targetTile;
     public GameObject BombPrefab;
     public GameObject PortalPrefab;
+    public GameObject TurretPrefab;
 
     #region Solved_Methods
     private void OnEnable()
@@ -38,11 +40,11 @@ public class PlayerController : MonoBehaviour
             MovePlayerTo(targetTile.transform.position);
             pointer.SetState(true, targetTile);
             
-            if (targetTile.Type == Tile.TileType.Land)
+            if (targetTile.gfx.tileType == TilePainter.TileType.Land)
             {
                 DisplayMenu(LandCanvas);
             }
-            else if (targetTile.Type == Tile.TileType.Path)
+            else if (targetTile.gfx.tileType == TilePainter.TileType.Path)
             {
                 DisplayMenu(PathCanvas);
             }
@@ -72,19 +74,27 @@ public class PlayerController : MonoBehaviour
         PathCanvas.gameObject.SetActive(false);
     }
 
-    public void SpawnBombAtTarget()
+    public void SpawnObjectAtTarget(int spawnIndex)
     {
-        GameObject bomb = Instantiate(BombPrefab, targetTile.transform.position, Quaternion.identity);
-        bomb.transform.parent = targetTile.transform;
-        targetTile.SpawnedObject = bomb;
-        ToggleTargetTile(targetTile);
-    }
+        GameObject obj;
 
-    public void SpawnPortalAtTarget()
-    {
-        GameObject portal = Instantiate(PortalPrefab, targetTile.transform.position, Quaternion.identity);
-        portal.transform.parent = targetTile.transform;
-        targetTile.SpawnedObject = portal;
+        if (spawnIndex == 0)
+        {
+            obj = Instantiate(BombPrefab, targetTile.transform.position, Quaternion.identity);
+            obj.GetComponent<Bomb>().OnInstantiate(7);
+        }
+        else if (spawnIndex == 1)
+        {
+            obj = Instantiate(PortalPrefab, targetTile.transform.position, Quaternion.identity);
+            obj.GetComponent<Portal>().OnInstantiate(12);
+        }
+        else
+        {
+            obj = Instantiate(TurretPrefab, targetTile.transform.position, Quaternion.identity);
+        }
+
+        obj.transform.parent = targetTile.transform;
+        targetTile.SpawnedObject = obj;
         ToggleTargetTile(targetTile);
     }
 }
