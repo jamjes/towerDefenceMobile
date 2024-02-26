@@ -15,6 +15,9 @@ public class Turret : MonoBehaviour, IDamageable
     public delegate void TurretDelegate(int value);
     public static event TurretDelegate OnTurrentDismantle;
 
+    public delegate void TurretUIDelegate(Turret turret);
+    public static event TurretUIDelegate OnTurretHoverEnter;
+
     void Start()
     {
         sprRenderer.sprite = baseSprite;
@@ -45,6 +48,14 @@ public class Turret : MonoBehaviour, IDamageable
     public void Dismantle()
     {
         Kill();
+    }
+
+    void OnMouseEnter()
+    {
+        if (OnTurretHoverEnter != null)
+        {
+            OnTurretHoverEnter(this);
+        }
     }
 
     void OnMouseDown()

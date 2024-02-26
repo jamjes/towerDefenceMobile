@@ -8,6 +8,7 @@ public class enemySpawner : MonoBehaviour
     private float timeReference;
     public EnemyPool objPool;
     public Transform spawnPoint;
+    public bool run = false;
 
     private void Start()
     {
@@ -16,20 +17,23 @@ public class enemySpawner : MonoBehaviour
 
     private void Update()
     {
-        timeReference -= Time.deltaTime;
-
-        if (timeReference <= 0)
+        if (run)
         {
-            GameObject request = objPool.GetPooledObject();
-            
-            if (request != null)
-            {
-                request.transform.position = spawnPoint.transform.position;
-                request.GetComponent<enemyMovement>().Init();
-                request.SetActive(true);
-            }
+            timeReference -= Time.deltaTime;
 
-            timeReference = interval;
+            if (timeReference <= 0)
+            {
+                GameObject request = objPool.GetPooledObject();
+
+                if (request != null)
+                {
+                    request.transform.position = spawnPoint.transform.position;
+                    request.GetComponent<enemyMovement>().Init();
+                    request.SetActive(true);
+                }
+
+                timeReference = interval;
+            }
         }
     }
 }
