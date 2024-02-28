@@ -145,4 +145,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprRenderer: {fileID: 36132547314557375}
   baseColor: {r: 0.12941177, g: 0.4156863, b: 0.10588236, a: 1}
+  highlightColor: {r: 0.12388414, g: 0.2830189, b: 0.11080456, a: 1}
   selectColor: {r: 0.872, g: 0.7816098, b: 0.20204873, a: 1}
+  spawnable: {fileID: 0}

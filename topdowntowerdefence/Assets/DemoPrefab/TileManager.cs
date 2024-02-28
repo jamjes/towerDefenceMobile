@@ -7,62 +7,31 @@ public class TileManager : MonoBehaviour
     public GroundTile activeTile;
     public GameObject TurretPrefab;
 
+    public delegate void UIScoreDelegate(int value);
+    public static event UIScoreDelegate OnUIScore;
+
 
     private void OnEnable()
     {
         GroundTile.OnTileSelect += SetActiveTile;
-        UIButton.OnTurretSpawn += SpawnTurret;
-        UIButton.OnTurretDismantle += DismantleTurret;
+        //UIButton.OnTurretSpawn += SpawnTurret;
+        //UIButton.OnTurretDismantle += DismantleTurret;
     }
 
     private void OnDisable()
     {
         GroundTile.OnTileSelect -= SetActiveTile;
-        UIButton.OnTurretSpawn -= SpawnTurret;
-        UIButton.OnTurretDismantle -= DismantleTurret;
+        //UIButton.OnTurretSpawn -= SpawnTurret;
+        //UIButton.OnTurretDismantle -= DismantleTurret;
     }
-
     void SetActiveTile(GroundTile targetTile)
     {
-        if (activeTile == null)
+        if (activeTile == targetTile)
         {
-            activeTile = targetTile;
-            activeTile.Select();
-        }
-        else if (activeTile == targetTile)
-        {
-            activeTile.Deselect();
             activeTile = null;
+            return;
         }
-        else
-        {
-            activeTile.Deselect();
-            activeTile = targetTile;
-            activeTile.Select();
-        }
-    }
 
-    void SpawnTurret()
-    {
-        if (activeTile != null)
-        {
-            if (activeTile.spawnable == null)
-            {
-                GameObject turret = Instantiate(TurretPrefab, activeTile.transform.position, Quaternion.identity);
-                activeTile.spawnable = turret;
-            }
-        }
-    }
-
-    void DismantleTurret()
-    {
-        if (activeTile != null)
-        {
-            if (activeTile.spawnable != null)
-            {
-                Destroy(activeTile.spawnable);
-                activeTile.spawnable = null;
-            }
-        }
+        activeTile = targetTile;
     }
 }

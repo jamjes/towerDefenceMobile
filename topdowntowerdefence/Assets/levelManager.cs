@@ -1,53 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
-public class levelManager : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
-    public Transform[] path;
-
-    public static levelManager Instance;
-
-    public GroundTile[] tiles;
-    public GroundTile activeTile;
+    public static LevelManager Instance;
+    public GroundTile ActiveTile; //{ private set; get; }
+    [SerializeField] Canvas buildMenu, trapMenu;
+    public Canvas ActiveMenu;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            return;
+        }
+        
+        Destroy(gameObject);
+    }
+
+    public void SetActiveTile(GroundTile targetTile)
+    {
+        if (ActiveTile == targetTile)
+        {
+            ActiveTile = null;
+            ActiveMenu.gameObject.SetActive(false);
+            return;
+        }
+
+        ActiveTile = targetTile;
+
+        if (ActiveTile.Type == GroundTile.TileType.Grass)
+        {
+            ActiveMenu = buildMenu;
         }
         else
         {
-            Destroy(gameObject);
-        }
-    }
-
-    public void SetActiveTile(GroundTile tile)
-    {
-        if (activeTile != null)
-        {
-            //activeTile.Deselect();
-
-            if (activeTile == tile)
-            {
-                activeTile = null;
-                return;
-            }
+            ActiveMenu = trapMenu;
         }
 
-        activeTile = tile;
-        //activeTile.Select();
-        DisableAllOtherTiles();
-    }
-
-    void DisableAllOtherTiles()
-    {
-        foreach(GroundTile t in tiles)
-        {
-            Debug.Log($"t: {t.name}, target: {activeTile.name}");
-        }
+        ActiveMenu.transform.position = new Vector3(targetTile.transform.position.x, targetTile.transform.position.y + .5f);
+        ActiveMenu.gameObject.SetActive(true);
     }
 }

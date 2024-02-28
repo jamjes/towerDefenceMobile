@@ -7,9 +7,11 @@ public class UIButton : MonoBehaviour
     public delegate void UIButtonDelegate();
     public static event UIButtonDelegate OnTurretSpawn;
     public static event UIButtonDelegate OnTurretDismantle;
-    
+
     public void SpawnTurretAtTarget()
     {
+        Debug.Log("Button Pressed");
+
         if (OnTurretSpawn != null)
         {
             OnTurretSpawn();

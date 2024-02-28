@@ -12,9 +12,9 @@ public class enemyMovement : MonoBehaviour
     public void Init()
     {
         pathIndex = 0;
-        transform.position = levelManager.Instance.path[pathIndex].position;
+        //transform.position = levelManager.Instance.path[pathIndex].position;
         pathIndex++;
-        target = levelManager.Instance.path[pathIndex];
+        //target = levelManager.Instance.path[pathIndex];
     }
 
     private void Update()
@@ -23,15 +23,15 @@ public class enemyMovement : MonoBehaviour
         {
             pathIndex++;
 
-            if (pathIndex == levelManager.Instance.path.Length)
-            {
-                gameObject.SetActive(false);
-                return;
-            }
-            else
-            {
-                target = levelManager.Instance.path[pathIndex];
-            }
+            //if (pathIndex == levelManager.Instance.path.Length)
+            //{
+                //gameObject.SetActive(false);
+                //return;
+            //}
+            //else
+            //{
+                //target = levelManager.Instance.path[pathIndex];
+            //}
         }
     }
 

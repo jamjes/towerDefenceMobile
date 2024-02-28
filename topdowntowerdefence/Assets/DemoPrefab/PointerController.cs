@@ -6,14 +6,12 @@ public class PointerController : MonoBehaviour
 {
     private void OnEnable()
     {
-        GroundTile.OnTileHoverEnter += SetPointerLocationTo;
-        PlayerTurret.OnTurretHoverEnter += SetPointerLocationTo;
+        //GroundTile.OnTileSelect += SetPointerLocationTo;
     }
 
     private void OnDisable()
     {
-        GroundTile.OnTileHoverEnter -= SetPointerLocationTo;
-        PlayerTurret.OnTurretHoverEnter -= SetPointerLocationTo;
+        //GroundTile.OnTileSelect -= SetPointerLocationTo;
     }
 
     void SetPointerLocationTo(GroundTile targetTile)
