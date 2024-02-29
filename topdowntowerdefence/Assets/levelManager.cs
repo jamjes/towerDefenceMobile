@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour
     public GroundTile ActiveTile; //{ private set; get; }
     [SerializeField] Canvas buildMenu, trapMenu;
     public Canvas ActiveMenu;
+    public Transform[] path;
 
     private void Awake()
     {
@@ -22,7 +23,7 @@ public class LevelManager : MonoBehaviour
 
     public void SetActiveTile(GroundTile targetTile)
     {
-        if (ActiveTile == targetTile)
+        if (targetTile == null || ActiveTile == targetTile)
         {
             ActiveTile = null;
             ActiveMenu.gameObject.SetActive(false);
@@ -31,7 +32,7 @@ public class LevelManager : MonoBehaviour
 
         ActiveTile = targetTile;
 
-        if (ActiveTile.Type == GroundTile.TileType.Grass)
+        if (ActiveTile.GetTileType() == GroundTile.TileType.Grass)
         {
             ActiveMenu = buildMenu;
         }

@@ -4,23 +4,20 @@ using UnityEngine;
 
 public class PointerController : MonoBehaviour
 {
+    [SerializeField] SpriteRenderer spriteRenderer;
+    
     private void OnEnable()
     {
-        //GroundTile.OnTileSelect += SetPointerLocationTo;
+        GroundTile.OnTileHoverEnter += SetPointerLocationTo;
     }
 
     private void OnDisable()
     {
-        //GroundTile.OnTileSelect -= SetPointerLocationTo;
+        GroundTile.OnTileHoverEnter -= SetPointerLocationTo;
     }
 
     void SetPointerLocationTo(GroundTile targetTile)
     {
         transform.position = targetTile.transform.position;
-    }
-
-    void SetPointerLocationTo(PlayerTurret targetTurret)
-    {
-        transform.position = targetTurret.transform.position;
     }
 }

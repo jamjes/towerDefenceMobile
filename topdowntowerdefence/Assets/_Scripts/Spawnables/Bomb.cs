@@ -8,6 +8,7 @@ public class Bomb : MonoBehaviour, ISpawnable, IDamageable
     [SerializeField] TextMeshProUGUI _timerLabel;
     bool _started = false;
     float timeReference;
+    [SerializeField] CircleCollider2D circleCollider;
 
     public void Heal()
     {
@@ -21,6 +22,18 @@ public class Bomb : MonoBehaviour, ISpawnable, IDamageable
 
     public void Kill()
     {
+        //RaycastHit2D[] col = Physics2D.BoxCastAll(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.zero);
+
+        RaycastHit2D[] cols = Physics2D.CircleCastAll(circleCollider.bounds.center, circleCollider.radius, Vector2.zero);
+
+        foreach (var col in cols)
+        {
+            if (col.collider.gameObject.TryGetComponent(out Enemy enemy))
+            {
+                enemy.Inflict(10);
+            }
+        }
+
         Destroy(this.gameObject);
     }
 
@@ -38,7 +51,6 @@ public class Bomb : MonoBehaviour, ISpawnable, IDamageable
         {
             timeReference -= Time.deltaTime;
             _timerLabel.text = timeReference.ToString("0.00");
-
         }
     }
 

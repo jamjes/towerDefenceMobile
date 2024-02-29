@@ -12,11 +12,13 @@ public class ScoreHandler : MonoBehaviour
     private void OnEnable()
     {
         TileManager.OnUIScore += UpdateScore;
+        Enemy.OnEnemyDeath += UpdateScore;
     }
 
     private void OnDisable()
     {
         TileManager.OnUIScore -= UpdateScore;
+        Enemy.OnEnemyDeath -= UpdateScore;
     }
 
     void Start()

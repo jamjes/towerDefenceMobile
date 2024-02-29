@@ -6,26 +6,23 @@ using UnityEngine.EventSystems;
 public class GroundTile : MonoBehaviour
 {
     public enum TileType { Grass, Path };
-    public TileType Type; //{ get; private set; }
+    [SerializeField] TileType type;
     public GameObject SpawnedObject { private set; get; }
-
     SpriteRenderer spriteRenderer;
-
-    [SerializeField] Color baseColor, highlightColor;
-
+    [SerializeField] Color baseColor, altColor;
 
     //bool selected;
 
     public delegate void GroundTileDelegate(GroundTile tile);
-    //public static event GroundTileDelegate OnTileHoverEnter;
+    public static event GroundTileDelegate OnTileHoverEnter;
+    public static event GroundTileDelegate OnTileHoverExit;
     public static event GroundTileDelegate OnTileSelect;
-
+    public static event GroundTileDelegate OnTileDeselect;
 
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-
 
     private void OnEnable()
     {
@@ -39,9 +36,22 @@ public class GroundTile : MonoBehaviour
         UIButton.OnTurretDismantle -= Deselect;
     }
 
-    void OnMouseEnter() => Highlight();
+    void OnMouseEnter()
+    {
+        if (LevelManager.Instance.ActiveTile == null)
+        {
+            Highlight();
+        }
+    }
 
-    private void OnMouseExit() => Deselect();
+    void OnMouseExit() 
+    {
+        if (LevelManager.Instance.ActiveTile == null)
+        {
+            Deselect();
+        } 
+    }
+    
 
     void OnMouseDown()
     {
@@ -49,40 +59,47 @@ public class GroundTile : MonoBehaviour
         {
             return;
         }
+
+        Deselect();
         
-        if (LevelManager.Instance.ActiveTile == null ||
-            LevelManager.Instance.ActiveTile == this)
+        if (LevelManager.Instance.ActiveTile == null)
         {
-            Deselect();
+            if (OnTileSelect != null)
+            {
+                OnTileSelect(this);
+            }
+
             LevelManager.Instance.SetActiveTile(this);
             return;
         }
 
-        LevelManager.Instance.SetActiveTile(LevelManager.Instance.ActiveTile);
         Highlight();
+        LevelManager.Instance.SetActiveTile(null);
+
+        if (OnTileDeselect != null)
+        {
+            OnTileDeselect(this);
+        }
     }
 
     void Deselect()
     {
-        if (LevelManager.Instance.ActiveTile == null)
-        {
-            spriteRenderer.color = baseColor;
-        }
+        spriteRenderer.color = baseColor;
     }
         
 
     void Highlight()
     {
-        if (LevelManager.Instance.ActiveTile == null)
-        {
-            spriteRenderer.color = highlightColor;
-        }
+        spriteRenderer.color = altColor;
     }
 
-    public void AddSpawnedObject(GameObject targetObject)
+    public TileType GetTileType()
     {
-        SpawnedObject = targetObject;
-        SpawnedObject.SetActive(true);
-        SpawnedObject.transform.SetParent(gameObject.transform);
+        return type;
+    }
+
+    public void SetSpawnedObject(GameObject target)
+    {
+        SpawnedObject = target;
     }
 }

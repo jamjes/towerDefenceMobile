@@ -23,7 +23,7 @@ public class Turret : MonoBehaviour, IDamageable
         sprRenderer.sprite = baseSprite;
         _power = 1;
         _value = 75;
-        UI.gameObject.SetActive(false);
+        //UI.gameObject.SetActive(false);
     }
 
     public void Heal()
